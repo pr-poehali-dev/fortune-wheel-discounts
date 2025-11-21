@@ -114,39 +114,34 @@ const FortuneWheel = () => {
           >
             {segments.map((segment, index) => {
               const anglePerSegment = 360 / segments.length;
-              const startAngle = index * anglePerSegment;
-              const endAngle = (index + 1) * anglePerSegment;
-              const midAngle = (startAngle + endAngle) / 2;
-              
-              const x1 = 50 + 50 * Math.cos((startAngle * Math.PI) / 180);
-              const y1 = 50 + 50 * Math.sin((startAngle * Math.PI) / 180);
-              const x2 = 50 + 50 * Math.cos((endAngle * Math.PI) / 180);
-              const y2 = 50 + 50 * Math.sin((endAngle * Math.PI) / 180);
-              
-              const textRadius = 65;
-              const textAngleRad = (midAngle * Math.PI) / 180;
-              const textX = 50 + textRadius * Math.cos(textAngleRad);
-              const textY = 50 + textRadius * Math.sin(textAngleRad);
+              const angle = index * anglePerSegment;
               
               return (
                 <div
                   key={index}
-                  className="absolute inset-0"
+                  className="absolute inset-0 flex items-center justify-center"
                   style={{
-                    clipPath: `polygon(50% 50%, ${x1}% ${y1}%, ${x2}% ${y2}%)`,
-                    backgroundColor: segment.color,
+                    transform: `rotate(${angle}deg)`,
+                    clipPath: `polygon(50% 50%, 50% 0%, ${50 + 50 * Math.tan((anglePerSegment * Math.PI) / 360)}% 0%, 50% 50%)`
                   }}
                 >
                   <div
-                    className="absolute text-white font-bold"
+                    className="absolute w-full h-full"
                     style={{
-                      top: `${textY}%`,
-                      left: `${textX}%`,
-                      transform: `translate(-50%, -50%) rotate(${midAngle + 90}deg)`,
-                      fontSize: typeof segment.discount === 'string' ? '0.8rem' : '1.8rem',
+                      backgroundColor: segment.color,
+                      clipPath: `polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%)`
+                    }}
+                  />
+                  <div
+                    className="absolute text-white font-extrabold"
+                    style={{
+                      top: '25%',
+                      left: '50%',
+                      transform: `translateX(-50%) rotate(${anglePerSegment / 2}deg)`,
+                      fontSize: typeof segment.discount === 'string' ? '0.75rem' : '1.8rem',
+                      textShadow: '2px 2px 6px rgba(0,0,0,0.6)',
                       whiteSpace: 'nowrap',
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-                      fontWeight: '800'
+                      zIndex: 10
                     }}
                   >
                     {typeof segment.discount === 'number' ? `${segment.discount}%` : segment.discount}
