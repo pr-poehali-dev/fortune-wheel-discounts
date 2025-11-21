@@ -143,9 +143,10 @@ const FortuneWheel = () => {
                       top: `${textY}%`,
                       left: `${textX}%`,
                       transform: `translate(-50%, -50%) rotate(${midAngle + 90}deg)`,
-                      fontSize: typeof segment.discount === 'string' ? '0.65rem' : '1.25rem',
+                      fontSize: typeof segment.discount === 'string' ? '0.8rem' : '1.8rem',
                       whiteSpace: 'nowrap',
-                      textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                      fontWeight: '800'
                     }}
                   >
                     {typeof segment.discount === 'number' ? `${segment.discount}%` : segment.discount}
