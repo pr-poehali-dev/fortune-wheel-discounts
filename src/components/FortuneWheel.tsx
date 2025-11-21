@@ -123,7 +123,10 @@ const FortuneWheel = () => {
               const x2 = 50 + 50 * Math.cos((endAngle * Math.PI) / 180);
               const y2 = 50 + 50 * Math.sin((endAngle * Math.PI) / 180);
               
-              const largeArcFlag = anglePerSegment > 180 ? 1 : 0;
+              const textRadius = 65;
+              const textAngleRad = (midAngle * Math.PI) / 180;
+              const textX = 50 + textRadius * Math.cos(textAngleRad);
+              const textY = 50 + textRadius * Math.sin(textAngleRad);
               
               return (
                 <div
@@ -137,11 +140,12 @@ const FortuneWheel = () => {
                   <div
                     className="absolute text-white font-bold"
                     style={{
-                      top: '30%',
-                      left: '65%',
-                      transform: `rotate(${midAngle + 90}deg)`,
-                      fontSize: typeof segment.discount === 'string' ? '0.7rem' : '1.5rem',
-                      whiteSpace: 'nowrap'
+                      top: `${textY}%`,
+                      left: `${textX}%`,
+                      transform: `translate(-50%, -50%) rotate(${midAngle + 90}deg)`,
+                      fontSize: typeof segment.discount === 'string' ? '0.65rem' : '1.25rem',
+                      whiteSpace: 'nowrap',
+                      textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
                     }}
                   >
                     {typeof segment.discount === 'number' ? `${segment.discount}%` : segment.discount}
