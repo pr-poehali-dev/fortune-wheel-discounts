@@ -3,22 +3,27 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
 interface Segment {
-  discount: number;
+  discount: number | string;
   color: string;
   rotation: number;
 }
 
 const segments: Segment[] = [
   { discount: 5, color: '#FF6B9D', rotation: 0 },
-  { discount: 10, color: '#8B5CF6', rotation: 90 },
-  { discount: 15, color: '#FCD34D', rotation: 180 },
-  { discount: 20, color: '#F97316', rotation: 270 },
+  { discount: 10, color: '#8B5CF6', rotation: 40 },
+  { discount: 15, color: '#FCD34D', rotation: 80 },
+  { discount: 20, color: '#F97316', rotation: 120 },
+  { discount: 'Крути ещё раз', color: '#34D399', rotation: 160 },
+  { discount: 5, color: '#FF6B9D', rotation: 200 },
+  { discount: 10, color: '#8B5CF6', rotation: 240 },
+  { discount: 15, color: '#FCD34D', rotation: 280 },
+  { discount: 20, color: '#F97316', rotation: 320 },
 ];
 
 const FortuneWheel = () => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
-  const [result, setResult] = useState<number | null>(null);
+  const [result, setResult] = useState<number | string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
   const spinWheel = () => {
@@ -36,8 +41,8 @@ const FortuneWheel = () => {
 
     setTimeout(() => {
       const normalizedRotation = totalRotation % 360;
-      const segmentIndex = Math.floor(normalizedRotation / 90);
-      const winningDiscount = segments[segmentIndex].discount;
+      const segmentIndex = Math.floor(normalizedRotation / 40);
+      const winningDiscount = segments[segmentIndex % segments.length].discount;
       
       setResult(winningDiscount);
       setShowConfetti(true);
@@ -94,29 +99,43 @@ const FortuneWheel = () => {
               transitionDuration: isSpinning ? '3000ms' : '0ms'
             }}
           >
-            {segments.map((segment, index) => (
-              <div
-                key={index}
-                className="absolute inset-0"
-                style={{
-                  clipPath: 'polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%)',
-                  transform: `rotate(${segment.rotation}deg)`,
-                  backgroundColor: segment.color,
-                  borderRadius: '50%'
-                }}
-              >
+            {segments.map((segment, index) => {
+              const anglePerSegment = 360 / segments.length;
+              const startAngle = index * anglePerSegment;
+              const endAngle = (index + 1) * anglePerSegment;
+              const midAngle = (startAngle + endAngle) / 2;
+              
+              const x1 = 50 + 50 * Math.cos((startAngle * Math.PI) / 180);
+              const y1 = 50 + 50 * Math.sin((startAngle * Math.PI) / 180);
+              const x2 = 50 + 50 * Math.cos((endAngle * Math.PI) / 180);
+              const y2 = 50 + 50 * Math.sin((endAngle * Math.PI) / 180);
+              
+              const largeArcFlag = anglePerSegment > 180 ? 1 : 0;
+              
+              return (
                 <div
-                  className="absolute text-white font-bold text-4xl"
+                  key={index}
+                  className="absolute inset-0"
                   style={{
-                    top: '25%',
-                    left: '70%',
-                    transform: 'rotate(45deg)'
+                    clipPath: `polygon(50% 50%, ${x1}% ${y1}%, ${x2}% ${y2}%)`,
+                    backgroundColor: segment.color,
                   }}
                 >
-                  {segment.discount}%
+                  <div
+                    className="absolute text-white font-bold"
+                    style={{
+                      top: '30%',
+                      left: '65%',
+                      transform: `rotate(${midAngle + 90}deg)`,
+                      fontSize: typeof segment.discount === 'string' ? '0.7rem' : '1.5rem',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {typeof segment.discount === 'number' ? `${segment.discount}%` : segment.discount}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full shadow-lg z-10 flex items-center justify-center">
@@ -158,15 +177,17 @@ const FortuneWheel = () => {
       {result !== null && (
         <div className="relative z-10 mt-8 animate-bounce-in">
           <div className="bg-white rounded-3xl shadow-2xl px-12 py-8 border-4 border-purple-500">
-            <p className="text-2xl text-gray-700 mb-2">Поздравляем! 🎊</p>
+            <p className="text-2xl text-gray-700 mb-2">
+              {result === 'Крути ещё раз' ? 'Попробуй снова! 🎲' : 'Поздравляем! 🎊'}
+            </p>
             <p className="text-5xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 bg-clip-text text-transparent">
-              Ваша скидка: {result}%
+              {typeof result === 'number' ? `Ваша скидка: ${result}%` : result}
             </p>
           </div>
         </div>
       )}
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-3">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-3 flex-wrap justify-center max-w-2xl">
         <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
           <div className="w-4 h-4 rounded-full bg-[#FF6B9D]" />
           <span className="text-sm font-medium">5%</span>
@@ -182,6 +203,10 @@ const FortuneWheel = () => {
         <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
           <div className="w-4 h-4 rounded-full bg-[#F97316]" />
           <span className="text-sm font-medium">20%</span>
+        </div>
+        <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
+          <div className="w-4 h-4 rounded-full bg-[#34D399]" />
+          <span className="text-sm font-medium">Крути ещё раз</span>
         </div>
       </div>
     </div>
