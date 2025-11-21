@@ -187,28 +187,7 @@ const FortuneWheel = () => {
         </div>
       )}
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-3 flex-wrap justify-center max-w-2xl">
-        <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-          <div className="w-4 h-4 rounded-full bg-[#FF6B9D]" />
-          <span className="text-sm font-medium">5%</span>
-        </div>
-        <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-          <div className="w-4 h-4 rounded-full bg-[#8B5CF6]" />
-          <span className="text-sm font-medium">10%</span>
-        </div>
-        <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-          <div className="w-4 h-4 rounded-full bg-[#FCD34D]" />
-          <span className="text-sm font-medium">15%</span>
-        </div>
-        <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-          <div className="w-4 h-4 rounded-full bg-[#F97316]" />
-          <span className="text-sm font-medium">20%</span>
-        </div>
-        <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-          <div className="w-4 h-4 rounded-full bg-[#34D399]" />
-          <span className="text-sm font-medium">Крути ещё раз</span>
-        </div>
-      </div>
+
     </div>
   );
 };
