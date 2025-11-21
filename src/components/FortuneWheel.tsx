@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
@@ -25,6 +25,9 @@ const FortuneWheel = () => {
   const [rotation, setRotation] = useState(0);
   const [result, setResult] = useState<number | string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  
+  const spinSoundRef = useRef<HTMLAudioElement | null>(null);
+  const winSoundRef = useRef<HTMLAudioElement | null>(null);
 
   const spinWheel = () => {
     if (isSpinning) return;
@@ -32,6 +35,11 @@ const FortuneWheel = () => {
     setIsSpinning(true);
     setResult(null);
     setShowConfetti(false);
+
+    const spinAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBDGJ0/LTgjMGHGm98OScTgwPUKvo8bllHAU7k9nyz3otBSd9zPLaizsIGGS57OihUBAKTKXh8bllHAU7k9nyz3otBSd9zPLaikwZEDmLw/DXgjEGG2q88OOcTgwPUKvo8bllHAU7k9nyz3otBSd9zPLaizsIGGS57OihUBAKTKXh8bllHAU7k9nyz3otBSd9zPLaii0KE0KZ3/LKfzAGI2/B8eSeTAwOT6nl8bFjGwU1jtTxy34qBSN5ye/bjjwIF2K47eeeUBEJRaHg8bFjGwU1jtTxy34qBSN5ye/bjjwIF2K47eeeUBEJRaHg8bFjGwU1jtTxy34qBSN5ye/bjjwIF2K47eeeUBEJRaHg8bFjGwU1jtTxy34qBSN5ye/bjjwIF2K47eeeUBEJRaHg8bFjGwU1jtTxy34qBSN5ye/bjjwIF2K47eeeUBEJRaHg8bFjGwU1jtTxy34qBSN5ye/bjjwIF2K47eeeUBEJRaHg8bFjGwU1jtTxy34qBSN5ye/bjjwIF2K47eeeUBEJRaHg8bFjGwU1jtTxy34qBSN5ye/bjjwIF2K47eeeUBEJRaHg8bFjGwU1jtTxy34qBSN5ye/bjjwIF2K47eeeUBEJRaHg8bFjGwU=');
+    spinAudio.volume = 0.3;
+    spinAudio.play().catch(() => {});
+    spinSoundRef.current = spinAudio;
 
     const spins = 5 + Math.random() * 3;
     const extraDegrees = Math.floor(Math.random() * 360);
@@ -47,6 +55,11 @@ const FortuneWheel = () => {
       setResult(winningDiscount);
       setShowConfetti(true);
       setIsSpinning(false);
+
+      const winAudio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+      winAudio.volume = 0.5;
+      winAudio.play().catch(() => {});
+      winSoundRef.current = winAudio;
 
       setTimeout(() => {
         setShowConfetti(false);
